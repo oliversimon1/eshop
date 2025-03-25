@@ -1,0 +1,134 @@
+components:
+  schemas:
+    CreateOrderRequest:
+      type: object
+      properties:
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+          minItems: 1
+          description: List of products and their quantities for the order
+      required:
+        - items
+
+    OrderItemRequest:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: ID of the product to order
+        quantity:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Quantity of the product to order
+      required:
+        - productId
+        - quantity
+
+    OrderModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [ AWAITING_PAYMENT, CANCELED, FINISHED ]
+        price:
+          type: number
+          format: double
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemModel'
+
+    OrderItemModel:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        productName:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: double
+
+    ProductsResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductModel'
+      required:
+        - products
+
+    ProductModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "Product name"
+        price:
+          type: number
+          format: double
+          example: 99.99
+        stock:
+          type: integer
+          example: 50
+      required:
+        - id
+        - name
+        - price
+        - stock
+
+    CreateProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Product name"
+        price:
+          type: number
+          format: double
+          minimum: 0
+          example: 99.99
+        stock:
+          type: integer
+          default: 0
+          example: 50
+      required:
+        - name
+        - price
+
+    UpdateProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Updated product name"
+        price:
+          type: number
+          format: double
+          example: 99.99
+
+    UpdateStockRequest:
+      type: object
+      properties:
+        stock:
+          type: integer
+          description: Amount to add or subtract to the current stock
+          example: 10
+      required:
+        - stock

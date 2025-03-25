@@ -1,0 +1,154 @@
+openapi: 3.0.3
+info:
+  title: Oliver Eshop Product API
+  description: API for managing products in the eshop
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      summary: Create a new order
+      description: Create a new order with specified products and quantities
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/OrderModel'
+        '400':
+          description: Bad request - invalid input
+        '404':
+          description: One or more products not found
+  /orders/{orderId}/payment:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Process payment for an order
+      description: Simulate payment processing for the specified order
+      operationId: processPayment
+      responses:
+        '200':
+          description: Payment processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/OrderModel'
+        '404':
+          description: Order not found
+        '422':
+          description: Payment processing failed
+  /products:
+    post:
+      summary: Create a new product
+      description: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/CreateProductRequest'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ProductModel'
+        '400':
+          description: Invalid input
+    get:
+      summary: List all products
+      operationId: getProducts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ProductsResponse'
+
+  /products/{productId}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get product by ID
+      operationId: getProduct
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ProductModel'
+        '404':
+          description: Product not found
+    put:
+      summary: Update product name or price
+      operationId: updateProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/UpdateProductRequest'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ProductModel'
+        '404':
+          description: Product not found
+    delete:
+        summary: Delete product
+        operationId: deleteProduct
+        responses:
+          '204':
+            description: Product deleted successfully
+          '404':
+            description: Product not found
+  /products/{productId}/stock:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    patch:
+      summary: Update product stock
+      operationId: updateProductStock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/UpdateStockRequest'
+      responses:
+        '200':
+          description: Stock updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ProductModel'
+        '404':
+          description: Product not found
