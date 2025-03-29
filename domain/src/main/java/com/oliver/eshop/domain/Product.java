@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @EqualsAndHashCode
@@ -16,6 +17,10 @@ public class Product {
     private String name;
     private Double price;
     private int stock;
+
+    private Integer version;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime modifiedAt;
 
     public Product(String name, Double price, int stock) {
         this.name = name;

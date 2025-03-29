@@ -9,7 +9,6 @@ import com.oliver.eshop.h2.product.entity.ProductEntity;
 import com.oliver.eshop.h2.product.mapping.DatabaseProductMapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
@@ -56,6 +55,9 @@ public interface DatabaseOrderMapper {
         return new Product(productEntity.getId(),
                 productEntity.getName(),
                 productEntity.getPrice(),
-                productEntity.getStock());
+                productEntity.getStock(),
+                productEntity.getVersion(),
+                productEntity.getCreatedAt(),
+                productEntity.getModifiedAt());
     }
 }

@@ -3,7 +3,10 @@ CREATE TABLE PRODUCTS
     id    UUID         NOT NULL PRIMARY KEY,
     name  VARCHAR(255) NOT NULL,
     price DOUBLE NOT NULL,
-    stock INT          NOT NULL
+    stock INT          NOT NULL,
+    version     INT DEFAULT 0,
+    created_at  TIMESTAMP WITH TIME ZONE,
+    modified_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE ORDERS

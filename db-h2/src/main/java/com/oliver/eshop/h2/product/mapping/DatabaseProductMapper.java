@@ -17,6 +17,9 @@ public interface DatabaseProductMapper {
         return new Product(productEntity.getId(),
                 productEntity.getName(),
                 productEntity.getPrice(),
-                productEntity.getStock());
+                productEntity.getStock(),
+                productEntity.getVersion(),
+                productEntity.getCreatedAt(),
+                productEntity.getModifiedAt());
     }
 }

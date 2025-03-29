@@ -62,7 +62,7 @@ class WriteOrdersServiceTest {
     @BeforeEach
     void setUp() {
         productId = UUID.randomUUID();
-        product = new Product(productId, "Product 1", 100.0, 100);
+        product = new Product(productId, "Product 1", 100.0, 100, 0, OffsetDateTime.now(), OffsetDateTime.now());
         OrderItemCommand orderItemCommand = new OrderItemCommand(productId, 2);
         createOrderCommand = new CreateOrderCommand(List.of(orderItemCommand));
         OrderItem orderItem = new OrderItem(product, 2, "Product 1", 100.0);
@@ -79,7 +79,8 @@ class WriteOrdersServiceTest {
 
         assertNotNull(createdOrder);
         verify(writeProductsRepository).saveAll(
-                List.of(new Product(productId, "Product 1", 100.0, 98))
+                List.of(new Product(productId, "Product 1", 100.0, 98,
+                        product.getVersion(), product.getCreatedAt(), product.getModifiedAt()))
         );
         verify(writeOrderRepository).save(any(Order.class));
         assertEquals(200.0, createdOrder.getPrice());
@@ -96,7 +97,7 @@ class WriteOrdersServiceTest {
     @Test
     void createOrder_shouldThrowNotEnoughStock() {
         when(readProductsRepository.getAllProductsByIds(anyList())).thenReturn(
-                List.of(new Product(productId, "Product 1", 100.0, 0))
+                List.of(new Product(productId, "Product 1", 100.0, 0, null, null, null))
         );
 
         assertThrows(ValidationException.class, () -> writeOrdersService.createOrder(createOrderCommand));

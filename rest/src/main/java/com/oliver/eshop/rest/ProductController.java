@@ -8,11 +8,13 @@ import com.oliver.eshop.rest.model.ProductModel;
 import com.oliver.eshop.rest.model.ProductsResponse;
 import com.oliver.eshop.rest.model.UpdateProductRequest;
 import com.oliver.eshop.rest.model.UpdateStockRequest;
+import com.oliver.eshop.service.exception.OptimisticLockingException;
 import com.oliver.eshop.service.product.QueryProductsService;
 import com.oliver.eshop.service.product.WriteProductsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -38,6 +40,7 @@ public class ProductController implements ProductsApi {
     }
 
     @Override
+    @Retryable(retryFor = OptimisticLockingException.class)
     public ResponseEntity<ProductModel> createProduct(CreateProductRequest createProductRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 restProductMapper.toRestModel(
@@ -53,12 +56,14 @@ public class ProductController implements ProductsApi {
     }
 
     @Override
+    @Retryable(retryFor = OptimisticLockingException.class)
     public ResponseEntity<Void> deleteProduct(UUID productId) {
         writeProductsService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
     @Override
+    @Retryable(retryFor = OptimisticLockingException.class)
     public ResponseEntity<ProductModel> updateProduct(UUID productId, UpdateProductRequest updateProductRequest) {
         return ResponseEntity.ok(
                 restProductMapper.toRestModel(
@@ -69,6 +74,7 @@ public class ProductController implements ProductsApi {
     }
 
     @Override
+    @Retryable(retryFor = OptimisticLockingException.class)
     public ResponseEntity<ProductModel> updateProductStock(UUID productId, UpdateStockRequest updateStockRequest) {
         return ResponseEntity.ok(
                 restProductMapper.toRestModel(

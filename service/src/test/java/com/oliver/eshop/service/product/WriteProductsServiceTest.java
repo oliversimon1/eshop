@@ -41,7 +41,7 @@ class WriteProductsServiceTest {
     @BeforeEach
     void setUp() {
         productId = UUID.randomUUID();
-        product = new Product(productId, "Product 1", 100.0, 10);
+        product = new Product(productId, "Product 1", 100.0, 10, 0, null, null);
     }
 
     @Test
