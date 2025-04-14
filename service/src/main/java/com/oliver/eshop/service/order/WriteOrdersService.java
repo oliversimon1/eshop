@@ -66,7 +66,7 @@ public class WriteOrdersService {
         return writeOrderRepository.save(order);
     }
 
-    @Scheduled(cron = "0 0/30 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void scheduleCancelUnfinishedOrders() {
         List<Order> ordersToCancel = readOrderRepository
                 .getAllOrdersByStatusAndCreatedAtBefore(
@@ -79,7 +79,7 @@ public class WriteOrdersService {
         log.info("Cancelled {} orders.", ordersToCancel.size());
     }
 
-    @Transactional
+    @Transactional // this will not work as transaction, it has to be moved to another class or use transaction manager
     protected void cancelOrder(Order order) {
         List<Product> orderedProducts = order.getOrderItems().stream().map(OrderItem::getProduct).toList();
 
