@@ -56,5 +56,4 @@ public class Order {
             throw new ValidationException("Order must have at least one item.");
         }
     }
-
 }

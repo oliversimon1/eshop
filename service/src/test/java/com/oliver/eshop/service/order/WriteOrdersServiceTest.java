@@ -23,13 +23,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -133,10 +131,7 @@ class WriteOrdersServiceTest {
 
     @Test
     void scheduleCancelUnfinishedOrders_shouldCancelOrdersSuccessfully() {
-        when(readOrderRepository.getAllOrdersByStatusAndCreatedAtBefore(any(OrderStatus.class), any(OffsetDateTime.class)))
-                .thenReturn(List.of(order));
-
-        writeOrdersService.scheduleCancelUnfinishedOrders();
+        writeOrdersService.cancelOrder(order);
 
         verify(writeOrderRepository).save(any(Order.class));
         verify(writeProductsRepository).saveAll(anyList());

@@ -4,7 +4,7 @@ import com.oliver.eshop.domain.OrderStatus;
 import com.oliver.eshop.h2.order.entity.OrderEntity;
 import com.oliver.eshop.h2.order.entity.OrderItemEntity;
 import com.oliver.eshop.h2.product.entity.ProductEntity;
-import com.oliver.eshop.service.order.WriteOrdersService;
+import com.oliver.eshop.service.order.scheduled.CancelUnfinishedOrderScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class CancelUnfinishedOrdersIT extends AbstractIT {
 
     @Autowired
-    private WriteOrdersService writeOrdersService;
+    private CancelUnfinishedOrderScheduler cancelUnfinishedOrderScheduler;
 
     @Test
     void cancelUnfinishedOrders() {
@@ -40,7 +40,7 @@ public class CancelUnfinishedOrdersIT extends AbstractIT {
         orderItemEntity.setOrder(orderEntity);
         orderEntity = orderJpaRepository.save(orderEntity);
 
-        writeOrdersService.scheduleCancelUnfinishedOrders();
+        cancelUnfinishedOrderScheduler.scheduleCancelUnfinishedOrders();
 
         orderEntity = orderJpaRepository.findById(orderEntity.getId()).get();
         assertEquals(OrderStatus.CANCELED, orderEntity.getStatus());
